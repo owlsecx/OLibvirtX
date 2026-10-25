@@ -18,23 +18,18 @@
 
 ## 📌 Overview
 
-Offline KVM/QEMU/libvirt hypervisor configuration & domain XML auditor
+OLibvirtX is an offline KVM/QEMU/libvirt hypervisor auditor. It reviews `libvirtd.conf`, `qemu.conf`, domain/storage/network/nwfilter/secret XML, and AppArmor/SELinux virt profile references. Secrets are masked; findings map to CWE, MITRE ATT&CK, and CIS-KVM with score/grade and multi-format export.
 
 ---
 
 ## ✨ Features
 
-- Offline, read-only audit of libvirt daemon config (listen_tcp, auth_*, socket perms, TLS verification, mDNS advertisement, access_drivers, audit/logging)
-- qemu.conf auditor — emulator user/group, capability clearing, security_driver, namespaces, seccomp, NBD/ VNC/SPICE TLS + listen + password (always masked)
-- Domain XML auditor — sVirt seclabels, PCI/USB host passthrough vs vIOMMU, USB redirection, shareable disks & cache modes, image perms, VNC/SPICE exposure, bound serial consoles, macvtap, nwfilter filterref, RNG backends, memballoon, cloud-init secrets in cmdline/sysinfo, qemu:commandline passthrough args
-- Storage pool, network, nwfilter and secret XML checks (secret values are never decrypted — masked)
-- AppArmor / SELinux virt profile reference checks
-- Hardened XML parsing — DOCTYPE / ENTITY refused
-- CWE / MITRE ATT&CK / CIS-KVM mapping per rule
-- Score + grade, min-severity filter, --fail-on gate
-- Export TXT / Markdown / JSON / CSV / SARIF 2.1.0
-- Hardened templates, rule catalogue, --explain
-- Self-test --demo (weak + hardened fixture trees)
+- libvirtd.conf audit: listen_tcp, auth_*, socket perms, TLS verification, mDNS, access_drivers, audit/logging
+- qemu.conf review: emulator user/group, capability clearing, security_driver, namespaces, seccomp, NBD/VNC/SPICE TLS
+- Domain XML checks: sVirt labels, PCI/USB passthrough, shareable disks, VNC/SPICE exposure, nwfilter, cloud-init secrets
+- Storage pool, network, nwfilter, and secret XML checks (secret values never decrypted)
+- AppArmor/SELinux virt profile references; hardened XML parsing (DOCTYPE/ENTITY refused)
+- Score/grade, templates, rule catalogue, TXT/MD/JSON/CSV/SARIF export, `--demo` and fail-on gates
 
 ---
 
@@ -48,7 +43,10 @@ Offline KVM/QEMU/libvirt hypervisor configuration & domain XML auditor
 ## 🚀 Usage
 
 ```bash
-./OLibvirtX
+./OLibvirtX --scan
+./OLibvirtX --domain guest.xml --libvirtd libvirtd.conf --format json -o libvirt.json
+./OLibvirtX --demo --fail-on high
+./OLibvirtX --help
 ```
 
 ---
